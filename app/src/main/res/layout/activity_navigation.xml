@@ -9,8 +9,8 @@
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fContainer"
         android:name="com.example.teuxdeux.fragments.HomeFragment"
-        android:layout_width="250dp"
-        android:layout_height="400dp"
+        android:layout_width="338dp"
+        android:layout_height="485dp"
         android:layout_marginTop="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -21,14 +21,13 @@
         android:id="@+id/bottom_nav"
         android:layout_width="403dp"
         android:layout_height="60dp"
-        android:layout_marginTop="76dp"
         android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fContainer"
-        app:layout_constraintVertical_bias="1.0"
-        app:menu="@menu/bottom_nav_menu"/>
+        app:layout_constraintVertical_bias="0.959"
+        app:menu="@menu/bottom_nav_menu" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
