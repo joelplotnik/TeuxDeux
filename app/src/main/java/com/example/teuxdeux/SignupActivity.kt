@@ -16,9 +16,6 @@ class SignupActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
 
-
-
-
         val db = Firebase.firestore
 
         findViewById<Button>(R.id.submit).setOnClickListener {

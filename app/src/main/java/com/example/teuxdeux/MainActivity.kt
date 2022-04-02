@@ -16,13 +16,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
-
-
         val db = Firebase.firestore
-
-
-
 
         findViewById<Button>(R.id.login).setOnClickListener {
             val user_email = findViewById<EditText>(R.id.email).text.toString()
