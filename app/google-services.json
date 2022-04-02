@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "507406819475",
+    "project_id": "cs481-169f5",
+    "storage_bucket": "cs481-169f5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:507406819475:android:ab80dcd8e15b2eb4672d66",
+        "android_client_info": {
+          "package_name": "com.example.midterm_joelplotnik"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "507406819475-79d579vc1b5ksv9c02ehjaosemg15euc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyCMYN9H9iWbBoejTjYb6CrI5U8F5LfFs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "507406819475-79d579vc1b5ksv9c02ehjaosemg15euc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:507406819475:android:977b6103203949a0672d66",
+        "android_client_info": {
+          "package_name": "com.example.teuxdeux"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "507406819475-79d579vc1b5ksv9c02ehjaosemg15euc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyCMYN9H9iWbBoejTjYb6CrI5U8F5LfFs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "507406819475-79d579vc1b5ksv9c02ehjaosemg15euc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
