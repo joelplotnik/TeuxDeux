@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.CreateToDoActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <EditText
+            android:id="@+id/create_to_do_textfield"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="New To-Do Task"
+            android:inputType="text"
+            android:layout_marginBottom="20dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="20dp">
+
+            <CheckBox
+                android:id="@+id/importance_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Important Task" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginLeft="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Task Type"
+                    android:textAlignment="center"/>
+
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/add_deadline_textfield"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Due Date / Deadline"
+            android:inputType="date"
+            android:layout_marginBottom="20dp"/>
+
+        <TextView
+            android:id="@+id/date_created_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Date Created: "
+            android:layout_marginBottom="20dp"/>
+
+        <Button
+            android:id="@+id/create_to_do_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Create To-Do Task"/>
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
