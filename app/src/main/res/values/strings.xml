@@ -21,4 +21,14 @@
     <string name="hello_todo_fragment">Hello todo fragment</string>
     <string name="hello_calendar_fragment">Hello calendar fragment</string>
     <string name="todo">todo</string>
+    <string-array name="task_types">
+        <item></item>
+        <item>Personal</item>
+        <item>Household</item>
+        <item>Groceries</item>
+        <item>Finance</item>
+        <item>Medical</item>
+        <item>School</item>
+        <item>Work</item>
+    </string-array>
 </resources>

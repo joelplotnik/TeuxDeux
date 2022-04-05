@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.CreateToDoActivity">
+    tools:context=".activities.ManageTaskActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,15 +16,15 @@
             android:id="@+id/add_to_do_textfield"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
             android:hint="New To-Do Task"
-            android:inputType="text"
-            android:layout_marginBottom="20dp"/>
+            android:inputType="text" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="20dp">
+            android:layout_marginBottom="20dp"
+            android:orientation="horizontal">
 
             <CheckBox
                 android:id="@+id/importance_checkbox"
@@ -35,20 +35,20 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_marginLeft="10dp">
+                android:layout_marginLeft="10dp"
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Task Type"
-                    android:textAlignment="center"/>
+                    android:textAlignment="center" />
 
                 <Spinner
                     android:id="@+id/type_spinner"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:entries="@array/task_types"/>
+                    android:entries="@array/task_types" />
 
             </LinearLayout>
 
@@ -58,22 +58,29 @@
             android:id="@+id/add_deadline_textfield"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
             android:hint="Due Date / Deadline"
-            android:inputType="date"
-            android:layout_marginBottom="20dp"/>
+            android:inputType="date" />
 
         <TextView
             android:id="@+id/date_created_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Date Created: "
-            android:layout_marginBottom="20dp"/>
+            android:layout_marginBottom="20dp"
+            android:text="Date Created: " />
 
         <Button
-            android:id="@+id/create_to_do_button"
+            android:id="@+id/edit_to_do_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Create To-Do Task"/>
+            android:layout_marginBottom="10dp"
+            android:text="Edit To-Do Task" />
+
+        <Button
+            android:id="@+id/remove_to_do_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Remove To-Do Task" />
 
     </LinearLayout>
 

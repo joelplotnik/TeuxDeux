@@ -2,13 +2,22 @@ package com.example.teuxdeux.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.teuxdeux.Model.ToDoListAdapter
+import com.example.teuxdeux.Model.ToDoTask
 import com.example.teuxdeux.R
 import com.example.teuxdeux.activities.CreateToDoActivity
+import com.example.teuxdeux.activities.ManageTaskActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.firestore.*
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,6 +33,10 @@ class ToDoFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var documentArrayList : ArrayList<ToDoTask>
+    private lateinit var displayAdapter : ToDoListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +60,36 @@ class ToDoFragment : Fragment() {
             }
         }
 
+        recyclerView = view.findViewById(R.id.recycler_view_tasks)
+        recyclerView.layoutManager = LinearLayoutManager(activity)
+        recyclerView.setHasFixedSize(true)
+        documentArrayList = arrayListOf()
+        displayAdapter = ToDoListAdapter(documentArrayList)
+        recyclerView.adapter = displayAdapter
+
+        getListFromFirebase()
+
+        displayAdapter.setOnItemClickListener(object : ToDoListAdapter.OnItemClickListener {
+            override fun onItemClick(itemView: View?, position: Int) {
+                val task = displayAdapter.taskList[position].task
+                val type = displayAdapter.taskList[position].type
+                val importance = displayAdapter.taskList[position].important
+                val completed = displayAdapter.taskList[position].completed
+
+                val intent = Intent(activity, ManageTaskActivity::class.java)
+                intent.putExtra("task", task)
+                intent.putExtra("type", type)
+                intent.putExtra("important", importance)
+                intent.putExtra("completed", completed)
+                startActivity(intent)
+            }
+
+            override fun onCheckBoxClicked(itemView: View?, position: Int, isChecked: Boolean) {
+                TODO("Not yet implemented")
+            }
+        })
+
+
         return view
     }
 
@@ -68,5 +111,27 @@ class ToDoFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+    private fun getListFromFirebase() {
+        val db = Firebase.firestore
+        db.collection("taskData").orderBy("deadline", Query.Direction.ASCENDING)
+            .addSnapshotListener(object: EventListener<QuerySnapshot> {
+                override fun onEvent(
+                    value: QuerySnapshot?,
+                    error: FirebaseFirestoreException?
+                ) {
+                    if(error != null) {
+                        Log.e("Firebase Error", error.message.toString())
+                        return
+                    }
+                    for(dc: DocumentChange in value?.documentChanges!!) {
+                        if(dc.type == DocumentChange.Type.ADDED) {
+                            documentArrayList.add(dc.document.toObject(ToDoTask::class.java))
+                        }
+                    }
+                    displayAdapter.notifyDataSetChanged()
+                }
+            })
     }
 }

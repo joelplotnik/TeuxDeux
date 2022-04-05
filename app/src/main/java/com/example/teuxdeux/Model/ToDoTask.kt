@@ -6,11 +6,12 @@ import java.text.DateFormat
 
 @Parcelize
 data class ToDoTask(
-    val id: Int = 0,
-    val task: String,
-    val type: String,
-    val important: String = "no",
-    val completed: Boolean = false,
+    val id: Int? = 0,
+    val user: String? = null,
+    val task: String? = null,
+    val type: String? = null,
+    val important: Boolean? = null,
+    val completed: Boolean? = null,
     val created: Long = System.currentTimeMillis(),
     val deadline: String? = null
 ) : Parcelable {
