@@ -53,4 +53,6 @@ dependencies {
 
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'androidx.recyclerview:recyclerview-selection:1.1.0'
+
+    implementation 'com.google.apis:google-api-services-calendar:v3-rev84-1.18.0-rc'
 }
