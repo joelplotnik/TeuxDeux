@@ -2,6 +2,7 @@ package com.example.teuxdeux.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import com.example.teuxdeux.R
@@ -9,6 +10,8 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 class ManageTaskActivity : AppCompatActivity() {
+    private var email: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_remove_task)
@@ -17,6 +20,7 @@ class ManageTaskActivity : AppCompatActivity() {
         val type = intent.getStringExtra("type")
         val importance = intent.getBooleanExtra("important", false)
         val completed = intent.getBooleanExtra("completed", false)
+        email = intent.getStringExtra("user_email").toString()
 
         val editToDoTask: Button = findViewById(R.id.edit_to_do_button)
         editToDoTask.setOnClickListener {
@@ -63,6 +67,7 @@ class ManageTaskActivity : AppCompatActivity() {
                     "Successfully edited To-Do task",
                     Toast.LENGTH_LONG
                 ).show()
+                this.finish()
             }
             .addOnFailureListener {
                 Toast.makeText(this, "Failed to edit To-Do task", Toast.LENGTH_LONG)
@@ -73,6 +78,7 @@ class ManageTaskActivity : AppCompatActivity() {
     private fun removeFromDatabase(task: String, important: Boolean, type: String, completed: Boolean) {
         val db = Firebase.firestore
         db.collection("taskData")
+            .whereEqualTo("email", email.toString())
             .whereEqualTo("task", task)
             .whereEqualTo("type", type)
             .whereEqualTo("important", important)
@@ -89,6 +95,7 @@ class ManageTaskActivity : AppCompatActivity() {
                             Toast.makeText(this, "Failed to remove To-Do task", Toast.LENGTH_SHORT).show()
                         }
                 }
+                this.finish()
             }
             .addOnFailureListener {
                 val dialogBuilder = AlertDialog.Builder(this)

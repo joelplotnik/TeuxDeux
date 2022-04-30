@@ -43,8 +43,9 @@ class SignupActivity : AppCompatActivity() {
                                 .add(user)
                                 .addOnSuccessListener { documentReference ->
                                     Toast.makeText(applicationContext,"User Has Been Added!!!!", Toast.LENGTH_SHORT).show()
-                                    startActivity(Intent(this, NavigationActivity::class.java))
-
+                                    val intent = Intent(this, NavigationActivity::class.java)
+                                    intent.putExtra("user_email", user_email)
+                                    startActivity(intent)
                                 }
                                 .addOnFailureListener { e ->
                                     Log.w(TAG, "Error adding document", e)

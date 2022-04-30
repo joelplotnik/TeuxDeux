@@ -14,16 +14,20 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_create_to_do.*
+import kotlinx.android.synthetic.main.activity_main.*
 import org.w3c.dom.Text
 import kotlin.random.Random
 
 class CreateToDoActivity : AppCompatActivity() {
 
     private val CHANNEL_ID = "channel_id_teuxdeux_01"
+    private var email: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_to_do)
+
+        email = intent.getStringExtra("user_email").toString()
 
         val createToDoTask: Button = findViewById(R.id.create_to_do_button)
         createToDoTask.setOnClickListener {
@@ -50,6 +54,7 @@ class CreateToDoActivity : AppCompatActivity() {
         val db = Firebase.firestore
         val taskData: MutableMap<String, Any> = HashMap()
 
+        taskData["email"] = email.toString()
         taskData["task"] = task
         taskData["important"] = important
         taskData["type"] = type

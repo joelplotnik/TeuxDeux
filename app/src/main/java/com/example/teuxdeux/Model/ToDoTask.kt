@@ -8,6 +8,7 @@ import java.text.DateFormat
 data class ToDoTask(
     val id: Int? = 0,
     val user: String? = null,
+    val email: String? = null,
     val task: String? = null,
     val type: String? = null,
     val important: Boolean? = null,

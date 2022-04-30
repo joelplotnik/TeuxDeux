@@ -2,6 +2,7 @@ package com.example.teuxdeux
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import com.example.teuxdeux.fragments.CalendarFragment
 import com.example.teuxdeux.fragments.HomeFragment
@@ -14,10 +15,12 @@ class NavigationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_navigation)
 
-        val homeFragment = HomeFragment()
-        val todoFragment = ToDoFragment()
-        val calendarFragment = CalendarFragment()
-        val settingsFragment = SettingsFragment()
+        val email = intent.getStringExtra("user_email").toString()
+        Log.d("USER_EMAIL", email)
+        val homeFragment = HomeFragment.newInstance(email)
+        val todoFragment = ToDoFragment.newInstance(email)
+        val calendarFragment = CalendarFragment.newInstance(email)
+        val settingsFragment = SettingsFragment.newInstance(email)
 
         changeFragment(homeFragment)
 

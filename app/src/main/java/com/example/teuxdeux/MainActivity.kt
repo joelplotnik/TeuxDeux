@@ -38,7 +38,9 @@ class MainActivity : AppCompatActivity() {
                 .get()
                 .addOnSuccessListener { result ->
                     if (!result.isEmpty()) {
-                        startActivity(Intent(this, NavigationActivity::class.java))
+                        val intent = Intent(this, NavigationActivity::class.java)
+                        intent.putExtra("user_email", user_email)
+                        startActivity(intent)
                     } else {
                         Toast.makeText(applicationContext,"That didn't work!", Toast.LENGTH_SHORT).show()
                     }

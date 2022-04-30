@@ -40,10 +40,18 @@ class CalendarFragment : Fragment() {
 
 
     private val db = Firebase.firestore
+    private var email: String? = null
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var documentArrayList: ArrayList<ToDoTask>
     private lateinit var displayAdapter: ToDoListAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            email = it.getString("email")
+        }
+    }
 
     @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreateView(
@@ -118,25 +126,44 @@ class CalendarFragment : Fragment() {
 
         return view
     }
-}
 
-private fun getListFromFirebase() {
-    val db = Firebase.firestore
-    if (db.collection("deadline") == Date()) {
-        db.collection("taskData").orderBy("deadline" , Query.Direction.ASCENDING)
-            .addSnapshotListener(object : EventListener<QuerySnapshot> {
-                override fun onEvent(
-                    value: QuerySnapshot? ,
-                    error: FirebaseFirestoreException?
-                ) {
+    private fun getListFromFirebase() {
+        val db = Firebase.firestore
+        if (db.collection("deadline") == Date()) {
+            db.collection("taskData").orderBy("deadline" , Query.Direction.ASCENDING)
+                .addSnapshotListener(object : EventListener<QuerySnapshot> {
+                    override fun onEvent(
+                        value: QuerySnapshot? ,
+                        error: FirebaseFirestoreException?
+                    ) {
 
-                    if (error != null) {
-                        Log.e("Firebase Error" , error.message.toString())
-                        return
+                        if (error != null) {
+                            Log.e("Firebase Error" , error.message.toString())
+                            return
+                        }
                     }
-                }
 
-            })
+                })
+        }
+    }
+
+    companion object {
+        /**
+         * Use this factory method to create a new instance of
+         * this fragment using the provided parameters.
+         *
+         * @param email Email Address of user
+         **/
+
+        @JvmStatic
+        fun newInstance(email: String) =
+            CalendarFragment().apply {
+                arguments = Bundle().apply {
+                    putString("email", email)
+                }
+            }
     }
 }
+
+
 
