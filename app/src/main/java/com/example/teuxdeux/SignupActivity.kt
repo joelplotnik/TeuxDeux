@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.service.controls.ControlsProviderService.TAG
+import android.text.TextUtils
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
@@ -19,55 +20,47 @@ class SignupActivity : AppCompatActivity() {
         val db = Firebase.firestore
 
         findViewById<Button>(R.id.submit).setOnClickListener {
-            var is_found = false
             val user_email = findViewById<EditText>(R.id.signup_email).text.toString()
             val user_password = findViewById<EditText>(R.id.signup_password).text.toString()
             val user_confirm_password = findViewById<EditText>(R.id.confirm_password).text.toString()
-            db.collection("users")
-                .get()
-                .addOnSuccessListener { result ->
-                    for (document in result) {
-                        //Log.d(TAG, "${document.id} => ${document.data}")
-                        var email = document.getString("email").toString()
-                        if(email == user_email){
-                            is_found = true
-                        }
-                        if(is_found == true){
-                            Toast.makeText(applicationContext,"Email Is Already In Use!!!!", Toast.LENGTH_SHORT).show()
-
-                        }
-                        else {
-                            if(user_password != user_confirm_password){
-                                Toast.makeText(applicationContext,"Passwords Do Not Match!!!!", Toast.LENGTH_SHORT).show()
-                            }
-                            else{
-                                val user = hashMapOf(
-                                    "email" to user_email,
-                                    "password" to user_password
-                                )
-                                db.collection("users")
-                                    .add(user)
-                                    .addOnSuccessListener { documentReference ->
-                                        Toast.makeText(applicationContext,"User Has Been Added!!!!", Toast.LENGTH_SHORT).show()
-                                        startActivity(Intent(this, NavigationActivity::class.java))
-
-                                    }
-                                    .addOnFailureListener { e ->
-                                        Log.w(TAG, "Error adding document", e)
-                                    }
-
-                            }
 
 
+            if(user_password != user_confirm_password){
+                Toast.makeText(applicationContext,"Passwords Do Not Match!!!!", Toast.LENGTH_SHORT).show()
+            } else if (!user_email.isEmailValid()) {
+                Toast.makeText(applicationContext,"Invalid Email!!!!", Toast.LENGTH_SHORT).show()
+            } else {
+                db.collection("users")
+                    .whereEqualTo("email", user_email)
+                    .get()
+                    .addOnSuccessListener { result ->
+                        if (result.isEmpty()) {
+                            val user = hashMapOf(
+                                "email" to user_email,
+                                "password" to user_password
+                            )
+                            db.collection("users")
+                                .add(user)
+                                .addOnSuccessListener { documentReference ->
+                                    Toast.makeText(applicationContext,"User Has Been Added!!!!", Toast.LENGTH_SHORT).show()
+                                    startActivity(Intent(this, NavigationActivity::class.java))
 
+                                }
+                                .addOnFailureListener { e ->
+                                    Log.w(TAG, "Error adding document", e)
+                                }
+                        } else {
+                            Toast.makeText(applicationContext,"Email already in use!!!!", Toast.LENGTH_SHORT).show()
                         }
 
+                    }.addOnFailureListener { exception ->
+                        Log.w(TAG, "Error getting documents.", exception)
                     }
-
-                }
-                .addOnFailureListener { exception ->
-                    Log.w(TAG, "Error getting documents.", exception)
-                }
+            }
         }
+    }
+
+    fun String.isEmailValid(): Boolean {
+        return !TextUtils.isEmpty(this) && android.util.Patterns.EMAIL_ADDRESS.matcher(this).matches()
     }
 }
