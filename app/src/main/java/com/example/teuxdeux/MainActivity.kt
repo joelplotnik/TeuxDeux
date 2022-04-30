@@ -21,27 +21,15 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.login).setOnClickListener {
             val user_email = findViewById<EditText>(R.id.email).text.toString()
             val user_password = findViewById<EditText>(R.id.password).text.toString()
-            var is_found = false
             db.collection("users")
+                .whereEqualTo("email", user_email)
+                .whereEqualTo("password", user_password)
                 .get()
                 .addOnSuccessListener { result ->
-                    for (document in result) {
-                        var email = document.getString("email").toString()
-                        if(user_email == email){
-                            is_found = true
-                            var password = document.getString("password").toString()
-                            if(password == user_password){
-                                startActivity(Intent(this, NavigationActivity::class.java))
-                            }
-                            else{
-                                Toast.makeText(applicationContext,"Incorrect Password", Toast.LENGTH_SHORT).show()
-
-                            }
-                        }
-                    }
-                    if(is_found == false){
-                        Toast.makeText(applicationContext,"User Does Not Exist!!!!", Toast.LENGTH_SHORT).show()
-
+                    if (!result.isEmpty()) {
+                        startActivity(Intent(this, NavigationActivity::class.java))
+                    } else {
+                        Toast.makeText(applicationContext,"That didn't work!", Toast.LENGTH_SHORT).show()
                     }
                 }
                 .addOnFailureListener { exception ->
