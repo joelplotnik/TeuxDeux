@@ -4,6 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.*
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import com.example.teuxdeux.MainActivity
 import com.example.teuxdeux.Model.ToDoTask
 import com.example.teuxdeux.NavigationActivity
@@ -13,8 +15,12 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_create_to_do.*
 import org.w3c.dom.Text
+import kotlin.random.Random
 
 class CreateToDoActivity : AppCompatActivity() {
+
+    private val CHANNEL_ID = "channel_id_teuxdeux_01"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_to_do)
@@ -31,12 +37,16 @@ class CreateToDoActivity : AppCompatActivity() {
             val type = typeList.selectedItem.toString()
             val deadline = findViewById<EditText>(R.id.add_deadline_textfield).text.toString()
 
-            saveToDatabase(task, importance, type, deadline)
+
+            todoNotification(task, Random.nextInt(0, 100))
+            saveToDatabase(task, importance, type, deadline) {
+                this.finish()
+            }
         }
     }
 
 
-    private fun saveToDatabase(task: String, important: Boolean, type: String, deadline: String) {
+    private fun saveToDatabase(task: String, important: Boolean, type: String, deadline: String, callback: () -> Unit) {
         val db = Firebase.firestore
         val taskData: MutableMap<String, Any> = HashMap()
 
@@ -54,10 +64,26 @@ class CreateToDoActivity : AppCompatActivity() {
                     "Successfully added To-Do task into firebase",
                     Toast.LENGTH_LONG
                 ).show()
+                callback()
             }
             .addOnFailureListener {
                 Toast.makeText(this, "Failed to add To-Do task into firebase", Toast.LENGTH_LONG)
                     .show()
             }
     }
+
+    private fun todoNotification(task: String, id: Int) {
+        val builder = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_notification)
+            .setContentTitle("New To-Do Task")
+            .setContentText(task)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setAutoCancel(true)
+
+        with(NotificationManagerCompat.from(this)){
+            notify(id, builder.build())
+        }
+    }
+
+
 }
