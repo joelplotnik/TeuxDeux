@@ -3,6 +3,7 @@ package com.example.teuxdeux.fragments
 import android.app.Activity
 import android.app.usage.UsageEvents
 import android.content.Intent
+import android.icu.util.Calendar
 import android.os.Build
 import android.os.Bundle
 import android.provider.CalendarContract
@@ -32,8 +33,10 @@ import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_calendar.*
+import ru.cleverpumpkin.calendar.CalendarDate
+import ru.cleverpumpkin.calendar.CalendarView
 import java.util.*
-
+import java.util.function.ToIntFunction
 
 
 class CalendarFragment : Fragment() {
@@ -59,11 +62,45 @@ class CalendarFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
+        val calendarId = db.collection("username")
         val view: View =
             inflater.inflate(com.example.teuxdeux.R.layout.fragment_calendar , container , false)
 
-        val calendarId = db.collection("username")
-        val cal= cView
+        val calendarView = view.findViewById<CalendarView>(R.id.calendar_view)
+        val calendar = Calendar.getInstance()
+
+        val month = 4
+        // Initial date
+        calendar.set(2022 , month , 1)
+        val initialDate = CalendarDate(calendar.time)
+
+// Minimum available date
+        calendar.set(2022 , month , 1)
+        val minDate = CalendarDate(calendar.time)
+
+// Maximum available date
+        calendar.set(2022 , 6 , 15)
+        val maxDate = CalendarDate(calendar.time)
+
+// The first day of week
+        val firstDayOfWeek = java.util.Calendar.MONDAY
+
+
+// Set up calendar with all available parameters
+        calendarView.setupCalendar(
+            initialDate = initialDate ,
+            minDate = minDate ,
+            maxDate = maxDate ,
+            selectionMode = CalendarView.SelectionMode.NONE ,
+            firstDayOfWeek = firstDayOfWeek ,
+            showYearSelectionView = true
+        )
+
+
+        // Set up calendar with SelectionMode.SINGLE
+       calendarView.setupCalendar(selectionMode = CalendarView.SelectionMode.MULTIPLE)
+
+        val selectedDates: MutableList<CalendarDate> = calendarView.selectedDates.toMutableList()
 
         db.collection("taskData")
             .get()
@@ -71,27 +108,68 @@ class CalendarFragment : Fragment() {
                 for (document in result) {
 
                     val task = document.getString("task").toString()
-                    val deadline = document.getString("deadline")
+                    val deadline = document.getString("deadline").toString()
                     val type = document.getString("type").toString()
+
+                    Log.d("string" , deadline)
+                   if(deadline.isNotEmpty()) {
+                       Log.d("loop","in")
+                       var y = 0
+                       var m = 0
+                       var d = 0
+
+                        var ye = ""
+                        var mo = ""
+                        var da = ""
+                        var c = 0
+
+                        while ( c < 4) {
+                            ye += deadline.get(c)
+                            c = c+1
+                        }
+                        y = ye.toInt()
+                        c = 5
+                       if(deadline.get(c) !='0' && deadline.get(c)!='1'){
+                        mo = "0"
+                        mo += deadline.get(c)
+                       c = 7}
+                       else{
+                        while (c <= 6) {
+                            mo += deadline.get(c)
+                            c = c+1
+                        }
+                        c = 8}
+                        m = mo.toInt()
+                       Log.d("month", m.toString())
+
+                        while (c < deadline.length) {
+                            da += deadline.get(c)
+                            c = c+1
+                        }
+                        d = da.toInt()
+                        Log.d("year" , y.toString())
+                       // Log.d("month" , m.toString())
+                        Log.d("day" , d.toString())
+
+                        calendar.set(y , m , d)
+                        val dates = CalendarDate(calendar.time)
+                       selectedDates += dates
+                       calendarView.updateSelectedDates(selectedDates)
 /*
-                    val intent = Intent(Intent.ACTION_INSERT)
-                        .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, deadline)
-                        .putExtra(CalendarContract.Events.TITLE, task)
-                        .putExtra(CalendarContract.Events.DESCRIPTION, type)*/
 
+                        val event = Event()
+                            .setSummary(task)
+                            .setDescription(type)
+                        val startDateTime = DateTime(deadline)
+                        val start = EventDateTime()
+                            .setDateTime(startDateTime)
+                            .setTimeZone("America/Los_Angeles")
 
-                    val event = Event()
-                        .setSummary(task)
-                        .setDescription(type)
-                    val startDateTime = DateTime(deadline)
-                    val start = EventDateTime()
-                        .setDateTime(startDateTime)
-                        .setTimeZone("America/Los_Angeles")
+                        event.start = start
+                        event.endTimeUnspecified
 
-                    event.start = start
-                    event.endTimeUnspecified
-
-                    calendarId.add(event)
+                        //calendarId.add(event)*/
+                    }
 
                 }
             }
@@ -100,52 +178,13 @@ class CalendarFragment : Fragment() {
             }
 
 
-        recyclerView = view.findViewById(com.example.teuxdeux.R.id.recycler)
-        recyclerView.layoutManager = LinearLayoutManager(activity)
-        recyclerView.setHasFixedSize(true)
-        documentArrayList = arrayListOf()
-        displayAdapter = ToDoListAdapter(documentArrayList)
-        recyclerView.adapter = displayAdapter
-
-        getListFromFirebase()
-
-        displayAdapter.setOnItemClickListener(object : ToDoListAdapter.OnItemClickListener {
-            override fun onItemClick(itemView: View? , position: Int) {
-                val task = displayAdapter.taskList[position].task
 
 
-                val intent = Intent(activity , ManageTaskActivity::class.java)
-                intent.putExtra("task" , task)
-                startActivity(intent)
-            }
-
-            override fun onCheckBoxClicked(itemView: View? , position: Int , isChecked: Boolean) {
-                TODO("Not yet implemented")
-            }
-        })
 
         return view
     }
 
-    private fun getListFromFirebase() {
-        val db = Firebase.firestore
-        if (db.collection("deadline") == Date()) {
-            db.collection("taskData").orderBy("deadline" , Query.Direction.ASCENDING)
-                .addSnapshotListener(object : EventListener<QuerySnapshot> {
-                    override fun onEvent(
-                        value: QuerySnapshot? ,
-                        error: FirebaseFirestoreException?
-                    ) {
 
-                        if (error != null) {
-                            Log.e("Firebase Error" , error.message.toString())
-                            return
-                        }
-                    }
-
-                })
-        }
-    }
 
     companion object {
         /**
@@ -163,6 +202,7 @@ class CalendarFragment : Fragment() {
                 }
             }
     }
+
 }
 
 
