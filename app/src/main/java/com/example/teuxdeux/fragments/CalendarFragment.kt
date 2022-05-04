@@ -62,7 +62,7 @@ class CalendarFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val calendarId = db.collection("username")
+        val calendarId = email
         val view: View =
             inflater.inflate(com.example.teuxdeux.R.layout.fragment_calendar , container , false)
 
@@ -71,15 +71,15 @@ class CalendarFragment : Fragment() {
 
         val month = 4
         // Initial date
-        calendar.set(2022 , month , 1)
+        calendar.set(2022 , 5 , 1)
         val initialDate = CalendarDate(calendar.time)
 
 // Minimum available date
-        calendar.set(2022 , month , 1)
+        calendar.set(2022 , 6 , 1)
         val minDate = CalendarDate(calendar.time)
 
 // Maximum available date
-        calendar.set(2022 , 6 , 15)
+        calendar.set(2022 , 7 , 15)
         val maxDate = CalendarDate(calendar.time)
 
 // The first day of week
@@ -140,6 +140,7 @@ class CalendarFragment : Fragment() {
                         }
                         c = 8}
                         m = mo.toInt()
+                       m = m-1
                        Log.d("month", m.toString())
 
                         while (c < deadline.length) {
@@ -155,8 +156,9 @@ class CalendarFragment : Fragment() {
                         val dates = CalendarDate(calendar.time)
                        selectedDates += dates
                        calendarView.updateSelectedDates(selectedDates)
-/*
 
+
+/*
                         val event = Event()
                             .setSummary(task)
                             .setDescription(type)
@@ -166,9 +168,9 @@ class CalendarFragment : Fragment() {
                             .setTimeZone("America/Los_Angeles")
 
                         event.start = start
-                        event.endTimeUnspecified
+                        event.endTimeUnspecified*/
 
-                        //calendarId.add(event)*/
+                        //calendarId.add(event)
                     }
 
                 }
@@ -177,6 +179,12 @@ class CalendarFragment : Fragment() {
                 Log.w(ControlsProviderService.TAG , "Error getting documents." , exception)
             }
 
+        calendarView.onDateClickListener = { date ->
+
+            // Do something ...
+            // for example get list of selected dates
+            val selectedDates = calendarView.selectedDates
+        }
 
 
 
