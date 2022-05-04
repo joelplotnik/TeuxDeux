@@ -21,6 +21,7 @@
     <string name="hello_todo_fragment">Hello todo fragment</string>
     <string name="hello_calendar_fragment">Hello calendar fragment</string>
     <string name="todo">todo</string>
+    <string name="switch_to_dark_mode">Switch to dark mode:</string>
     <string-array name="task_types">
         <item></item>
         <item>Personal</item>

@@ -1,8 +1,11 @@
 package com.example.teuxdeux
 
+import android.Manifest
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.example.teuxdeux.fragments.CalendarFragment
 import com.example.teuxdeux.fragments.HomeFragment
@@ -35,6 +38,7 @@ class NavigationActivity : AppCompatActivity() {
                     true
                 }
                 R.id.ic_calendar -> {
+                    permissionRequest()
                     changeFragment(calendarFragment)
                     true
                 }
@@ -46,6 +50,36 @@ class NavigationActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    private fun permissionRequest(){
+        var permissionList = mutableListOf<String>()
+        if (!(ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED)){
+            permissionList.add(Manifest.permission.READ_CALENDAR)
+        }
+        if (!(ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED)){
+            permissionList.add(Manifest.permission.WRITE_CALENDAR)
+        }
+        if (permissionList.isNotEmpty()){
+            //Log.d("XYZ", "${permissionList.toTypedArray()}")
+            ActivityCompat.requestPermissions(this, permissionList.toTypedArray(),100)
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
+                                            grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            100 -> {
+                for (index in grantResults.indices){
+                    if (grantResults[index] == PackageManager.PERMISSION_GRANTED){
+                        Log.d("XYZ", "Your ${permissions[index]} successfully granted")
+                    }
+                }
+            }
+        }
     }
 
     private fun changeFragment(fragment: Fragment) {
