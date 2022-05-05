@@ -46,15 +46,7 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view: View = inflater.inflate(R.layout.fragment_to_do, container, false)
-        val fab: FloatingActionButton = view.findViewById(R.id.add_task_button)
-        fab.setOnClickListener {
-            activity?.let {
-                val intent = Intent(it, CreateToDoActivity::class.java)
-                intent.putExtra("user_email", email)
-                it.startActivity(intent)
-            }
-        }
+        val view: View = inflater.inflate(R.layout.fragment_home, container, false)
 
         recyclerView = view.findViewById(R.id.recycler_view_tasks)
         recyclerView.layoutManager = LinearLayoutManager(activity)
