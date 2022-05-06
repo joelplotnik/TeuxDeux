@@ -59,7 +59,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:hint="Due Date / Deadline yyyy-mm-dd"
+            android:hint="Due Date / Deadline (yyyy-mm-dd)"
             android:inputType="date" />
 
         <TextView

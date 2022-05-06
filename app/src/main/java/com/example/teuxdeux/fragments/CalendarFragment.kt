@@ -103,6 +103,7 @@ class CalendarFragment : Fragment() {
         val selectedDates: MutableList<CalendarDate> = calendarView.selectedDates.toMutableList()
 
         db.collection("taskData")
+            .whereEqualTo("email", email)
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
