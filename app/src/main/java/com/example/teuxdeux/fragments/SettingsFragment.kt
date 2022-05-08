@@ -8,10 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Switch
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
-import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import com.example.teuxdeux.DarkModeViewModel
 import com.example.teuxdeux.R
-import kotlinx.android.synthetic.*
 
 
 /**
@@ -29,6 +29,8 @@ class SettingsFragment : Fragment() {
         }
     }
 
+    lateinit var viewModel: DarkModeViewModel
+
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,18 +38,27 @@ class SettingsFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view: View = inflater.inflate(R.layout.fragment_settings, container, false)
+
+        viewModel = ViewModelProvider(this).get(DarkModeViewModel::class.java)
+
+        viewModel.darkModeUnitState.observe(viewLifecycleOwner, Observer {
+            AppCompatDelegate.setDefaultNightMode(it)
+        })
+
         val switch: Switch = view.findViewById(R.id.themeSwitch)
 
-        switch.setOnCheckedChangeListener { buttonView, isChecked ->
+        switch.setOnCheckedChangeListener { _, isChecked ->
             if(isChecked) {
-                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES)
+                viewModel.darkModeUnitState.value = 2 // MODE_NIGHT_YES
+
             } else {
-                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO)
+                viewModel.darkModeUnitState.value = 1 // MODE_NIGHT_NO
             }
         }
 
         return view
     }
+
 
     companion object {
         /**
