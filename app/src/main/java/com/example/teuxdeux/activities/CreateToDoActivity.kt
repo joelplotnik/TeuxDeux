@@ -1,21 +1,13 @@
 package com.example.teuxdeux.activities
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.*
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.example.teuxdeux.MainActivity
-import com.example.teuxdeux.Model.ToDoTask
-import com.example.teuxdeux.NavigationActivity
 import com.example.teuxdeux.R
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.activity_create_to_do.*
-import kotlinx.android.synthetic.main.activity_main.*
-import org.w3c.dom.Text
 import kotlin.random.Random
 
 class CreateToDoActivity : AppCompatActivity() {

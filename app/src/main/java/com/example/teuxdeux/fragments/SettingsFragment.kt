@@ -10,7 +10,7 @@ import android.widget.Switch
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.teuxdeux.DarkModeViewModel
+import com.example.teuxdeux.ViewModel.DarkModeViewModel
 import com.example.teuxdeux.R
 
 

@@ -1,4 +1,4 @@
-package com.example.teuxdeux
+package com.example.teuxdeux.activities
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import com.example.teuxdeux.R
 import com.example.teuxdeux.fragments.CalendarFragment
 import com.example.teuxdeux.fragments.HomeFragment
 import com.example.teuxdeux.fragments.SettingsFragment

@@ -1,42 +1,24 @@
 package com.example.teuxdeux.fragments
 
-import android.app.Activity
-import android.app.usage.UsageEvents
-import android.content.Intent
 import android.icu.util.Calendar
 import android.os.Build
 import android.os.Bundle
-import android.provider.CalendarContract
 import android.service.controls.ControlsProviderService
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.teuxdeux.Model.ToDoListAdapter
 import com.example.teuxdeux.Model.ToDoTask
-import com.example.teuxdeux.NavigationActivity
 import com.example.teuxdeux.R
-import com.example.teuxdeux.activities.ManageTaskActivity
-import com.google.api.client.util.DateTime
-import com.google.api.services.calendar.model.Event
-import com.google.api.services.calendar.model.EventAttendee
-import com.google.api.services.calendar.model.EventDateTime
-import com.google.api.services.calendar.model.EventReminder
-import com.google.firebase.firestore.*
-import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.fragment_calendar.*
 import ru.cleverpumpkin.calendar.CalendarDate
 import ru.cleverpumpkin.calendar.CalendarView
 import java.util.*
-import java.util.function.ToIntFunction
 
 
 class CalendarFragment : Fragment() {
