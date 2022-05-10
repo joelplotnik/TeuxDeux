@@ -1,42 +1,32 @@
 package com.example.teuxdeux.fragments
 
-import android.app.Activity
-import android.app.usage.UsageEvents
-import android.content.Intent
 import android.icu.util.Calendar
+import android.icu.util.DateInterval
 import android.os.Build
 import android.os.Bundle
-import android.provider.CalendarContract
 import android.service.controls.ControlsProviderService
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.core.app.NotificationCompat.getColor
+import androidx.core.content.ContextCompat.getColor
+import androidx.core.content.res.ResourcesCompat.getColor
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.teuxdeux.Model.ToDoListAdapter
 import com.example.teuxdeux.Model.ToDoTask
-import com.example.teuxdeux.NavigationActivity
 import com.example.teuxdeux.R
-import com.example.teuxdeux.activities.ManageTaskActivity
-import com.google.api.client.util.DateTime
-import com.google.api.services.calendar.model.Event
-import com.google.api.services.calendar.model.EventAttendee
-import com.google.api.services.calendar.model.EventDateTime
-import com.google.api.services.calendar.model.EventReminder
+import com.google.android.material.color.MaterialColors.getColor
 import com.google.firebase.firestore.*
-import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_calendar.*
 import ru.cleverpumpkin.calendar.CalendarDate
 import ru.cleverpumpkin.calendar.CalendarView
 import java.util.*
-import java.util.function.ToIntFunction
 
 
 class CalendarFragment : Fragment() {
@@ -98,12 +88,13 @@ class CalendarFragment : Fragment() {
 
 
         // Set up calendar with SelectionMode.SINGLE
-       calendarView.setupCalendar(selectionMode = CalendarView.SelectionMode.MULTIPLE)
+        calendarView.setupCalendar(selectionMode = CalendarView.SelectionMode.MULTIPLE)
 
-        val selectedDates: MutableList<CalendarDate> = calendarView.selectedDates.toMutableList()
+        var selectedDates: MutableList<CalendarDate> = calendarView.selectedDates.toMutableList()
+        var context = requireContext()
 
         db.collection("taskData")
-            .whereEqualTo("email", email)
+            .whereEqualTo("email" , email)
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
@@ -112,51 +103,53 @@ class CalendarFragment : Fragment() {
                     val deadline = document.getString("deadline").toString()
                     val type = document.getString("type").toString()
 
-                    Log.d("string" , deadline)
-                   if(deadline.isNotEmpty()) {
-                       Log.d("loop","in")
-                       var y = 0
-                       var m = 0
-                       var d = 0
+                    if (deadline.isNotEmpty()) {
+
+                        var y = 0
+                        var m = 0
+                        var d = 0
 
                         var ye = ""
                         var mo = ""
                         var da = ""
                         var c = 0
 
-                        while ( c < 4) {
+                        while (c < 4) {
                             ye += deadline.get(c)
-                            c = c+1
+                            c = c + 1
                         }
                         y = ye.toInt()
                         c = 5
-                       if(deadline.get(c) !='0' && deadline.get(c)!='1'){
-                        mo = "0"
-                        mo += deadline.get(c)
-                       c = 7}
-                       else{
-                        while (c <= 6) {
+                        if (deadline.get(c) != '0' && deadline.get(c) != '1') {
+                            mo = "0"
                             mo += deadline.get(c)
-                            c = c+1
+                            c = 7
+                        } else {
+                            while (c <= 6) {
+                                mo += deadline.get(c)
+                                c = c + 1
+                            }
+                            c = 8
                         }
-                        c = 8}
                         m = mo.toInt()
-                       m = m-1
-                       Log.d("month", m.toString())
+                        m = m - 1
+
 
                         while (c < deadline.length) {
                             da += deadline.get(c)
-                            c = c+1
+                            c = c + 1
                         }
                         d = da.toInt()
-                        Log.d("year" , y.toString())
-                       // Log.d("month" , m.toString())
-                        Log.d("day" , d.toString())
+
 
                         calendar.set(y , m , d)
                         val dates = CalendarDate(calendar.time)
-                       selectedDates += dates
-                       calendarView.updateSelectedDates(selectedDates)
+
+                        selectedDates += dates
+                        calendarView.updateSelectedDates(selectedDates)
+
+
+
 
 
 /*
@@ -180,14 +173,27 @@ class CalendarFragment : Fragment() {
                 Log.w(ControlsProviderService.TAG , "Error getting documents." , exception)
             }
 
+
         calendarView.onDateClickListener = { date ->
 
             // Do something ...
             // for example get list of selected dates
-            val selectedDates = calendarView.selectedDates
+            val selected = calendarView.selectedDate
+
+            Log.d("day", selected.toString())
+            val bundle = Bundle()
+            bundle.putString("date", selected.toString())
+
+            val nextFrag1 = SingleDayFragment()
+            nextFrag1.arguments = bundle
+            val change = requireActivity().supportFragmentManager.beginTransaction().apply {
+                this.replace(R.id.fContainer , nextFrag1 , "findThisFragment")
+                this.addToBackStack(null)
+                this.commit()
+
+            }
+
         }
-
-
 
 
         return view
