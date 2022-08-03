@@ -23,7 +23,7 @@
             android:name=".activities.ManageTaskActivity"
             android:exported="false" />
         <activity
-            android:name=".SignupActivity"
+            android:name=".activities.SignupActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

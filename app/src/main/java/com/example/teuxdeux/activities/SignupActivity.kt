@@ -1,4 +1,4 @@
-package com.example.teuxdeux
+package com.example.teuxdeux.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +9,8 @@ import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import com.example.teuxdeux.NavigationActivity
+import com.example.teuxdeux.R
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
